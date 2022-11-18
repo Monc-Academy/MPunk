@@ -1,3 +1,5 @@
+import 'package:mpunk/widget/loadingWidget.dart';
+
 import '/providers/authProvider.dart';
 import '/providers/chatProvider.dart';
 import '/providers/databaseProvider.dart';
@@ -12,61 +14,93 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'firebase_options.dart';
 // MPunk Pedia -> The ultimate place to free your mind!
 
-void main() async {
-  // Ensuring all the widgets are initialized
-  WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  runApp(MyApp(
-    prefs: prefs,
-  ));
+void main() {
+  runApp(MyApp());
 }
-// Main Screen
-class MyApp extends StatelessWidget {
-  final SharedPreferences prefs;
-  // Firebase variables
-  // final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  // final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  // final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  MyApp({Key? key, required this.prefs}) : super(key: key);
+// Main Screen
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late SharedPreferences prefs;
+  // Firebase variables
+  late FirebaseAuth firebaseAuth;
+  late FirebaseFirestore firebaseFirestore;
+  late FirebaseStorage firebaseStorage;
+
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeVars();
+  }
+
+  initializeVars() async {
+    // Ensuring all the widgets are initialized
+    WidgetsFlutterBinding.ensureInitialized();
+
+    setState(() {
+      _isLoading = true;
+    });
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    prefs = await SharedPreferences.getInstance();
+    firebaseAuth = FirebaseAuth.instance;
+    firebaseFirestore = FirebaseFirestore.instance;
+    firebaseStorage = FirebaseStorage.instance;
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     // Providers
-    return MultiProvider(
-        providers: [
-          // ChangeNotifierProvider(
-          //     create: ((context) => AuthProvider(
-          //         prefs: prefs,
-          //         firebaseAuth: firebaseAuth,
-          //         firestore: firebaseFirestore))),
-          // ChangeNotifierProvider(
-          //     create: (context) =>
-          //         DatabaseProvider(firestore: firebaseFirestore)),
+    return !_isLoading
+        ? MultiProvider(
+            providers: [
+                ChangeNotifierProvider(
+                    create: ((context) => AuthProvider(
+                        prefs: prefs,
+                        firebaseAuth: firebaseAuth,
+                        firestore: firebaseFirestore))),
+                ChangeNotifierProvider(
+                    create: (context) =>
+                        DatabaseProvider(firestore: firebaseFirestore)),
 
-          // // See this 
-          // ChangeNotifierProvider(
-          //     create: (context) => VerifyProvider(
-          //           firebaseAuth: firebaseAuth,
-          //         )),
-          // ChangeNotifierProvider(
-          //     create: (context) => ChatProvider(
-          //           firestore: firebaseFirestore,
-          //         )),
-          // ChangeNotifierProvider(
-          //     create: (context) => ProfileProvider(
-          //         firebaseStorage: firebaseStorage,
-          //         firestore: firebaseFirestore)),
-        ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Messengang Chat Application',
-          theme: lightThemeData(context),
-          darkTheme: darkThemeData(context),
-          home: WelcomeScreen(),
-        ));
+                // See this
+                ChangeNotifierProvider(
+                    create: (context) => VerifyProvider(
+                          firebaseAuth: firebaseAuth,
+                        )),
+                ChangeNotifierProvider(
+                    create: (context) => ChatProvider(
+                          firestore: firebaseFirestore,
+                        )),
+                ChangeNotifierProvider(
+                    create: (context) => ProfileProvider(
+                        firebaseStorage: firebaseStorage,
+                        firestore: firebaseFirestore)),
+              ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              title: 'Messengang Chat Application',
+              theme: lightThemeData(context),
+              darkTheme: darkThemeData(context),
+              home: WelcomeScreen(),
+            ))
+        : const LoadingWidget();
   }
 }
