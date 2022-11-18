@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1084678667684",
+    "project_id": "mpunk-8fa03",
+    "storage_bucket": "mpunk-8fa03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084678667684:android:7fbdaacec0740f6b7a1531",
+        "android_client_info": {
+          "package_name": "com.example.mind_punk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1084678667684-8cdqim3hsdncd4dptgrcvtvu0gbk5fuv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzljohZFeufpKT4BPzZOwoZlBSACf06uc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1084678667684-8cdqim3hsdncd4dptgrcvtvu0gbk5fuv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

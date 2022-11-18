@@ -1,69 +1,72 @@
+import '/providers/authProvider.dart';
+import '/providers/chatProvider.dart';
+import '/providers/databaseProvider.dart';
+import '/providers/profileProvider.dart';
+import '/providers/verifyProvider.dart';
+import '/screens/welcome_screen.dart';
+import '/themedata.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // MPunk Pedia -> The ultimate place to free your mind!
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  // Ensuring all the widgets are initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(
+    prefs: prefs,
+  ));
 }
-
+// Main Screen
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+  // Firebase variables
+  // final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  // final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+  // final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+  MyApp({Key? key, required this.prefs}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'MPunk Media',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'MPunk Pedia'),
-    );
-  }
-}
+    // Providers
+    return MultiProvider(
+        providers: [
+          // ChangeNotifierProvider(
+          //     create: ((context) => AuthProvider(
+          //         prefs: prefs,
+          //         firebaseAuth: firebaseAuth,
+          //         firestore: firebaseFirestore))),
+          // ChangeNotifierProvider(
+          //     create: (context) =>
+          //         DatabaseProvider(firestore: firebaseFirestore)),
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+          // // See this 
+          // ChangeNotifierProvider(
+          //     create: (context) => VerifyProvider(
+          //           firebaseAuth: firebaseAuth,
+          //         )),
+          // ChangeNotifierProvider(
+          //     create: (context) => ChatProvider(
+          //           firestore: firebaseFirestore,
+          //         )),
+          // ChangeNotifierProvider(
+          //     create: (context) => ProfileProvider(
+          //         firebaseStorage: firebaseStorage,
+          //         firestore: firebaseFirestore)),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Messengang Chat Application',
+          theme: lightThemeData(context),
+          darkTheme: darkThemeData(context),
+          home: WelcomeScreen(),
+        ));
   }
 }
