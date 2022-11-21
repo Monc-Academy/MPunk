@@ -59,7 +59,7 @@ class _MainsScreenState extends State<MainsScreen> {
                     )
                   : CircleAvatar(
                       backgroundImage:
-                          AssetImage("assets/images/user_default.png"),
+                          AssetImage("assets/images/mpunk-blackbg.png"),
                       radius: 15,
                       backgroundColor: Colors.transparent,
                     ),
