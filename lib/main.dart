@@ -79,7 +79,6 @@ class _MyAppState extends State<MyApp> {
                 ChangeNotifierProvider(
                     create: (context) =>
                         DatabaseProvider(firestore: firebaseFirestore)),
-
                 // See this
                 ChangeNotifierProvider(
                     create: (context) => VerifyProvider(
