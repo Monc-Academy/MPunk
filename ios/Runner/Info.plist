@@ -14,6 +14,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>mind_punk</string>
+    <key>NSContactsUsageDescription</key>
+    <string>Reason we need access to the contact list</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

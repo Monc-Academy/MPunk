@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mpunk/providers/authProvider.dart';
+import 'package:mpunk/services/contact_service.dart';
 import 'package:provider/provider.dart';
 
 class PeopleScreen extends StatefulWidget {
@@ -19,6 +20,14 @@ class _PeopleScreenState extends State<PeopleScreen> {
           Text(data.firebaseAuth.currentUser!.email ?? "user email"),
           SizedBox(height: 30,),
           Text(data.firebaseAuth.currentUser!.uid ?? "user uid"),
+
+          SizedBox(height: 30,),
+          ElevatedButton(onPressed: (){
+           Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const ContactService()),
+  );
+          }, child: Text("Invite your friends!"))
         ],
       );
     });
